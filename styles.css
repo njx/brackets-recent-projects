@@ -1,0 +1,20 @@
+.dropdown-arrow {
+    display: inline-block;
+    width: 10px;
+    height: 8px;
+    margin-left: 4px;
+    background-image: url("down-arrow.png");
+}
+
+#project-title:hover {
+    color: #a0a0a0;
+    text-decoration: none;
+}
+
+/* TODO: style the dropdown content */
+#project-dropdown {
+    position: absolute;
+    padding: 5px;
+    background: #fff;
+    z-index: 100;
+}
