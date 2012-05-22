@@ -61,7 +61,13 @@ define(function (require, exports, module) {
         console.log("Recent projects: " + recentProjects);
     }
     
-    function show(e) {
+    function toggle(e) {
+        // If the dropdown is already visible, just return (so the root click handler on html
+        // will close it).
+        if ($("#project-dropdown").length) {
+            return;
+        }
+        
         // TODO: Can't just use Bootstrap 1.4 dropdowns for this since they're hard-coded to <li>s.
         // Have to do this stopProp to avoid the html click handler from firing when this returns.
         e.stopPropagation();
@@ -95,17 +101,19 @@ define(function (require, exports, module) {
             top: toggleOffset.top + $dropdownToggle.outerHeight()
         })
             .appendTo($("body"));
+        
+        // TODO: needs to use capture, otherwise clicking on the menus doesn't close it. More fallout
+        // from the fact that we can't use the Boostrap (1.4) dropdowns.
         $("html").on("click", closeDropdown);
     }
     
     // Initialize extension
     loadStyles("styles.css");
     
-    // TODO: arrow disappears whenever project is switched--need to re-add, or put it outside
-    // the title
-    $dropdownToggle = $("#project-title")
-        .append("<span class='dropdown-arrow'></span>")
-        .click(show);
+    $("#project-title")
+        .wrap("<div id='project-dropdown-toggle'></div>")
+        .after("<span class='dropdown-arrow'></span>");
+    $dropdownToggle = $("#project-dropdown-toggle").click(toggle);
     
     $(ProjectManager).on("initializeComplete", add);
     $(ProjectManager).on("projectRootChanged", add);

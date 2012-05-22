@@ -6,7 +6,7 @@
     background-image: url("down-arrow.png");
 }
 
-#project-title:hover {
+#project-dropdown-toggle:hover {
     color: #a0a0a0;
     text-decoration: none;
 }
