@@ -94,8 +94,6 @@ define(function (require, exports, module) {
                 .appendTo($dropdown);
         });
         
-        // We use window.document here just to be paranoid about accidentally using
-        // "document" to mean multiple things in the context of Brackets.
         $dropdown.css({
             left: toggleOffset.left,
             top: toggleOffset.top + $dropdownToggle.outerHeight()
