@@ -21,9 +21,10 @@
  * 
  */
 
-
 /*jslint vars: true, plusplus: true, devel: true, nomen: true, regexp: true, indent: 4, maxerr: 50 */
 /*global define, brackets, window, $ */
+
+// TODO: remember working set for each project
 
 define(function (require, exports, module) {
     'use strict';
@@ -31,18 +32,16 @@ define(function (require, exports, module) {
     var PREFERENCES_KEY = "com.adobe.brackets.brackets-recent-projects";
     
     // Brackets modules
-    var ProjectManager          = brackets.getModule("project/ProjectManager"),
+    var DocumentManager         = brackets.getModule("document/DocumentManager"),
+        ProjectManager          = brackets.getModule("project/ProjectManager"),
         PreferencesManager      = brackets.getModule("preferences/PreferencesManager");
     
     var $dropdownToggle;
     
     function loadStyles(relPath) {
-        var cssUrl = require.toUrl("./" + relPath);
-        var fileRef = window.document.createElement("link");
-        fileRef.setAttribute("rel", "stylesheet");
-        fileRef.setAttribute("type", "text/css");
-        fileRef.setAttribute("href", cssUrl);
-        window.document.getElementsByTagName("head")[0].appendChild(fileRef);
+        $("<link rel='stylesheet' type='text/css'></link>")
+            .attr("href", require.toUrl("./" + relPath))
+            .appendTo(document.head);
     }
     
     function add() {
@@ -74,7 +73,7 @@ define(function (require, exports, module) {
         
         var prefs = PreferencesManager.getPreferenceStorage(PREFERENCES_KEY),
             recentProjects = prefs.getValue("recentProjects") || [],
-            $dropdown = $("<div id='project-dropdown'></div>"),
+            $dropdown = $("<ul id='project-dropdown' class='dropdown-menu'></ul>"),
             toggleOffset = $dropdownToggle.offset();
         
         function closeDropdown() {
@@ -82,16 +81,22 @@ define(function (require, exports, module) {
             $dropdown.remove();
         }
         
+        var currentProject = ProjectManager.getProjectRoot().fullPath;
         recentProjects.forEach(function (root) {
-            $("<div class='recent-project'></div>")
-                .text(root)
-                .click(function () {
-                    // TODO: this isn't exactly the same as openProject()--doesn't clear out
-                    // working set.
-                    ProjectManager.loadProject(root);
-                    closeDropdown();
-                })
-                .appendTo($dropdown);
+            if (root !== currentProject) {
+                var $link = $("<a></a>")
+                    .text(root)
+                    .click(function () {
+                        // TODO: this is to mimic the behavior of openProject(). Should this be
+                        // in loadProject()?
+                        DocumentManager.closeAll();
+                        ProjectManager.loadProject(root);
+                        closeDropdown();
+                    });
+                $("<li></li>")
+                    .append($link)
+                    .appendTo($dropdown);
+            }
         });
         
         $dropdown.css({
@@ -100,7 +105,7 @@ define(function (require, exports, module) {
         })
             .appendTo($("body"));
         
-        // TODO: needs to use capture, otherwise clicking on the menus doesn't close it. More fallout
+        // TODO: should use capture, otherwise clicking on the menus doesn't close it. More fallout
         // from the fact that we can't use the Boostrap (1.4) dropdowns.
         $("html").on("click", closeDropdown);
     }

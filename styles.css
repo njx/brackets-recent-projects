@@ -12,9 +12,8 @@
 }
 
 /* TODO: style the dropdown content */
-#project-dropdown {
+#project-dropdown.dropdown-menu {
     position: absolute;
-    padding: 5px;
-    background: #fff;
+    display: block;
     z-index: 100;
 }
