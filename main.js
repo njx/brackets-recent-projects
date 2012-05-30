@@ -34,7 +34,9 @@ define(function (require, exports, module) {
     // Brackets modules
     var DocumentManager         = brackets.getModule("document/DocumentManager"),
         ProjectManager          = brackets.getModule("project/ProjectManager"),
-        PreferencesManager      = brackets.getModule("preferences/PreferencesManager");
+        PreferencesManager      = brackets.getModule("preferences/PreferencesManager"),
+        Commands                = brackets.getModule("command/Commands"),
+        CommandManager          = brackets.getModule("command/CommandManager");
     
     var $dropdownToggle;
     
@@ -81,7 +83,8 @@ define(function (require, exports, module) {
             $dropdown.remove();
         }
         
-        var currentProject = ProjectManager.getProjectRoot().fullPath;
+        var currentProject = ProjectManager.getProjectRoot().fullPath,
+            hasProject = false;
         recentProjects.forEach(function (root) {
             if (root !== currentProject) {
                 var $link = $("<a></a>")
@@ -96,8 +99,17 @@ define(function (require, exports, module) {
                 $("<li></li>")
                     .append($link)
                     .appendTo($dropdown);
+                hasProject = true;
             }
         });
+        if (hasProject) {
+            $("<li class='divider'>").appendTo($dropdown);
+        }
+        $("<li><a>Open Project...</a></li>")
+            .click(function () {
+                CommandManager.execute(Commands.FILE_OPEN_FOLDER);
+            })
+            .appendTo($dropdown);
         
         $dropdown.css({
             left: toggleOffset.left,
