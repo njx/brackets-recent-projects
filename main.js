@@ -36,7 +36,8 @@ define(function (require, exports, module) {
         ProjectManager          = brackets.getModule("project/ProjectManager"),
         PreferencesManager      = brackets.getModule("preferences/PreferencesManager"),
         Commands                = brackets.getModule("command/Commands"),
-        CommandManager          = brackets.getModule("command/CommandManager");
+        CommandManager          = brackets.getModule("command/CommandManager"),
+        strings                 = brackets.getModule("strings");
     
     var $dropdownToggle;
     
@@ -105,7 +106,7 @@ define(function (require, exports, module) {
         if (hasProject) {
             $("<li class='divider'>").appendTo($dropdown);
         }
-        $("<li><a>Open Project...</a></li>")
+        $("<li><a>" + strings.CMD_OPEN_FOLDER + "</a></li>")
             .click(function () {
                 CommandManager.execute(Commands.FILE_OPEN_FOLDER);
             })
