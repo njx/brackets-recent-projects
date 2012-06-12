@@ -17,3 +17,7 @@
     display: block;
     z-index: 100;
 }
+
+.recent-folder-path {
+    color: #ccc;
+}

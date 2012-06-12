@@ -63,6 +63,28 @@ define(function (require, exports, module) {
         console.log("Recent projects: " + recentProjects);
     }
     
+    function renderPath(path) {
+        if (path.length && path[path.length - 1] === "/") {
+            path = path.slice(0, path.length - 1);
+        }
+        
+        var lastSlash = path.lastIndexOf("/"), folder, rest;
+        if (lastSlash === path.length - 1) {
+            lastSlash = path.slice(0, path.length - 1).lastIndexOf("/");
+        }
+        if (lastSlash >= 0) {
+            rest = path.slice(0, lastSlash);
+            folder = path.slice(lastSlash + 1);
+        } else {
+            rest = "";
+            folder = path;
+        }
+        
+        var folderSpan = $("<span></span>").addClass("recent-folder").text(folder),
+            restSpan = $("<span></span>").addClass("recent-folder-path").text(" " + rest);
+        return $("<a></a>").append(folderSpan).append(restSpan);
+    }
+    
     function toggle(e) {
         // If the dropdown is already visible, just return (so the root click handler on html
         // will close it).
@@ -88,8 +110,7 @@ define(function (require, exports, module) {
             hasProject = false;
         recentProjects.forEach(function (root) {
             if (root !== currentProject) {
-                var $link = $("<a></a>")
-                    .text(root)
+                var $link = renderPath(root)
                     .click(function () {
                         // TODO: this is to mimic the behavior of openProject(). Should this be
                         // in loadProject()?
