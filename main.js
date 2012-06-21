@@ -37,15 +37,10 @@ define(function (require, exports, module) {
         PreferencesManager      = brackets.getModule("preferences/PreferencesManager"),
         Commands                = brackets.getModule("command/Commands"),
         CommandManager          = brackets.getModule("command/CommandManager"),
+        ExtensionUtils          = brackets.getModule("utils/ExtensionUtils"),
         strings                 = brackets.getModule("strings");
     
     var $dropdownToggle;
-    
-    function loadStyles(relPath) {
-        $("<link rel='stylesheet' type='text/css'></link>")
-            .attr("href", require.toUrl("./" + relPath))
-            .appendTo(document.head);
-    }
     
     function add() {
         var root = ProjectManager.getProjectRoot().fullPath,
@@ -81,7 +76,7 @@ define(function (require, exports, module) {
         }
         
         var folderSpan = $("<span></span>").addClass("recent-folder").text(folder),
-            restSpan = $("<span></span>").addClass("recent-folder-path").text(" " + rest);
+            restSpan = $("<span></span>").addClass("recent-folder-path").text(" in " + rest);
         return $("<a></a>").append(folderSpan).append(restSpan);
     }
     
@@ -145,13 +140,13 @@ define(function (require, exports, module) {
     }
     
     // Initialize extension
-    loadStyles("styles.css");
+    ExtensionUtils.loadStyleSheet(module, "styles.css");
     
     $("#project-title")
         .wrap("<div id='project-dropdown-toggle'></div>")
         .after("<span class='dropdown-arrow'></span>");
     $dropdownToggle = $("#project-dropdown-toggle").click(toggle);
     
-    $(ProjectManager).on("initializeComplete", add);
-    $(ProjectManager).on("projectRootChanged", add);
+    $(ProjectManager).on("projectOpen", add);
+    $(ProjectManager).on("beforeProjectClose", add);
 });
