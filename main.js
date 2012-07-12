@@ -107,11 +107,7 @@ define(function (require, exports, module) {
             if (root !== currentProject) {
                 var $link = renderPath(root)
                     .click(function () {
-                        // TODO: this is to mimic the behavior of openProject(). Should really
-                        // be a closeProject() method in ProjectManager.
-                        $(ProjectManager).triggerHandler("beforeProjectClose", root);
-                        DocumentManager.closeAll();
-                        ProjectManager.loadProject(root);
+                        ProjectManager.openProject(root);
                         closeDropdown();
                     });
                 $("<li></li>")
