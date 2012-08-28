@@ -38,6 +38,7 @@ define(function (require, exports, module) {
         Commands                = brackets.getModule("command/Commands"),
         CommandManager          = brackets.getModule("command/CommandManager"),
         ExtensionUtils          = brackets.getModule("utils/ExtensionUtils"),
+        LoadEvents              = brackets.getModule("utils/LoadEvents"),
         strings                 = brackets.getModule("strings");
     
     var $dropdownToggle;
@@ -55,7 +56,6 @@ define(function (require, exports, module) {
             recentProjects = recentProjects.slice(0, 20);
         }
         prefs.setValue("recentProjects", recentProjects);
-        console.log("Recent projects: " + recentProjects);
     }
     
     function renderPath(path) {
@@ -77,7 +77,7 @@ define(function (require, exports, module) {
         
         var folderSpan = $("<span></span>").addClass("recent-folder").text(folder),
             restSpan = $("<span></span>").addClass("recent-folder-path").text(" in " + rest);
-        return $("<a></a>").append(folderSpan).append(restSpan);
+        return $("<a></a>").addClass("recent-folder-link").append(folderSpan).append(restSpan);
     }
     
     function toggle(e) {
@@ -119,7 +119,7 @@ define(function (require, exports, module) {
         if (hasProject) {
             $("<li class='divider'>").appendTo($dropdown);
         }
-        $("<li><a>" + strings.CMD_OPEN_FOLDER + "</a></li>")
+        $("<li><a id='open-folder-link'>" + strings.CMD_OPEN_FOLDER + "</a></li>")
             .click(function () {
                 CommandManager.execute(Commands.FILE_OPEN_FOLDER);
             })
@@ -139,11 +139,13 @@ define(function (require, exports, module) {
     // Initialize extension
     ExtensionUtils.loadStyleSheet(module, "styles.css");
     
-    $("#project-title")
-        .wrap("<div id='project-dropdown-toggle'></div>")
-        .after("<span class='dropdown-arrow'></span>");
-    $dropdownToggle = $("#project-dropdown-toggle").click(toggle);
-    
     $(ProjectManager).on("projectOpen", add);
     $(ProjectManager).on("beforeProjectClose", add);
+
+    LoadEvents.htmlContentLoadComplete(function () {
+        $("#project-title")
+            .wrap("<div id='project-dropdown-toggle'></div>")
+            .after("<span class='dropdown-arrow'></span>");
+        $dropdownToggle = $("#project-dropdown-toggle").click(toggle);
+    });
 });

@@ -15,9 +15,18 @@
 #project-dropdown.dropdown-menu {
     position: absolute;
     display: block;
+    max-width: none;
     z-index: 100;
 }
 
+.recent-folder-link, .recent-folder, .recent-folder-path {
+    white-space: nowrap;
+}
+
+.recent-folder, #open-folder-link {
+    color: #333;
+}
+
 .recent-folder-path {
-    color: #ccc;
+    color: #aaa;
 }
