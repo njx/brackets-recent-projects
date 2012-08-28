@@ -9,6 +9,5 @@ starts being maintained when you first use the extension, so you won't see folde
 installed it).
 
 TODO:
-* Should repopulate the working set with the files that were open last time you were in that project.
 * Styling needs to be improved (maybe should be light-on-dark to match the project panel).
 * Clicking on the menus doesn't dismiss the dropdown. (Need to migrate to Bootstrap 2...)

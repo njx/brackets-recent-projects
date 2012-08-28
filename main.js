@@ -98,6 +98,7 @@ define(function (require, exports, module) {
         
         function closeDropdown() {
             $("html").off("click", closeDropdown);
+            $("#project-files-container").off("scroll", closeDropdown);
             $dropdown.remove();
         }
         
@@ -134,6 +135,10 @@ define(function (require, exports, module) {
         // TODO: should use capture, otherwise clicking on the menus doesn't close it. More fallout
         // from the fact that we can't use the Boostrap (1.4) dropdowns.
         $("html").on("click", closeDropdown);
+        
+        // Hide the menu if the user scrolls in the project tree. Otherwise the Lion scrollbar
+        // overlaps it.
+        $("#project-files-container").on("scroll", closeDropdown);
     }
     
     // Initialize extension
