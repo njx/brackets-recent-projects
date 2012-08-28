@@ -38,7 +38,7 @@ define(function (require, exports, module) {
         Commands                = brackets.getModule("command/Commands"),
         CommandManager          = brackets.getModule("command/CommandManager"),
         ExtensionUtils          = brackets.getModule("utils/ExtensionUtils"),
-        LoadEvents              = brackets.getModule("utils/LoadEvents"),
+        AppInit                 = brackets.getModule("utils/AppInit"),
         strings                 = brackets.getModule("strings");
     
     var $dropdownToggle;
@@ -147,7 +147,7 @@ define(function (require, exports, module) {
     $(ProjectManager).on("projectOpen", add);
     $(ProjectManager).on("beforeProjectClose", add);
 
-    LoadEvents.htmlContentLoadComplete(function () {
+    AppInit.htmlReady(function () {
         $("#project-title")
             .wrap("<div id='project-dropdown-toggle'></div>")
             .after("<span class='dropdown-arrow'></span>");
