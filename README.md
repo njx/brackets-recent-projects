@@ -1,3 +1,6 @@
+**This is no longer being maintained in this repo. It's been checked into
+the main Brackets repo in the extensions/user folder.**
+
 brackets-recent-projects
 ========================
 
